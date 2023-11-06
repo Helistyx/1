@@ -1,0 +1,29 @@
+import cv2
+from google.colab.patches import cv2_imshow
+import numpy as np
+
+# 读取图像
+image = cv2.imread('123.png')
+
+# 模糊图像
+blurred = cv2.GaussianBlur(image, (5, 5), 0)
+
+# 增加亮度和对比度
+alpha = 1.5  # 调整亮度
+beta = 50    # 调整对比度
+adjusted = cv2.convertScaleAbs(blurred, alpha=alpha, beta=beta)
+
+# 边缘增强
+gray = cv2.cvtColor(adjusted, cv2.COLOR_BGR2GRAY)
+edges = cv2.Canny(gray, 50, 150)
+enhanced = cv2.bitwise_and(adjusted, adjusted, mask=edges)
+
+# 保存美化后的图像
+cv2.imwrite('output.jpg', enhanced)
+
+# 显示原始和美化后的图像
+cv2_imshow(image)
+cv2_imshow(enhanced)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
